@@ -6,6 +6,13 @@ import Text from './text';
 // to do: remove the deprecated translation keys [name, 'title'] & [name, 'description']
 
 export default class ServiceItem extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isPurposeExpanded: true,
+        };
+    }
+
     render() {
         const {
             checked,
@@ -20,6 +27,7 @@ export default class ServiceItem extends React.Component {
             visible,
             t,
         } = this.props;
+        const { isPurposeExpanded } = this.state;
         const required = this.props.required || false;
         const optOut = this.props.optOut || false;
         const purposes = this.props.purposes || [];
@@ -31,12 +39,12 @@ export default class ServiceItem extends React.Component {
         const purposesText = purposes
             .map(
                 (purpose) =>
-                    t(['!', 'purposes', purpose, 'title?']) || asTitle(purpose)
+                    t(['!', 'purposes', purpose, 'title?']) || asTitle(purpose),
             )
             .join(', ');
         const optOutText = optOut ? (
             <span
-                className="cm-opt-out"
+                className='cm-opt-out'
                 title={t(['service', 'optOut', 'description'])}
             >
                 {t(['service', 'optOut', 'title'])}
@@ -46,7 +54,7 @@ export default class ServiceItem extends React.Component {
         );
         const requiredText = required ? (
             <span
-                className="cm-required"
+                className='cm-required'
                 title={t(['service', 'required', 'description'])}
             >
                 {t(['service', 'required', 'title'])}
@@ -56,16 +64,13 @@ export default class ServiceItem extends React.Component {
         );
 
         let purposesContent;
-        if (purposes.length > 0)
-            purposesContent = (
-                <p className="purposes">
-                    {t([
-                        'service',
-                        purposes.length > 1 ? 'purposes' : 'purpose',
-                    ])}
-                    : {purposesText}
+        if (purposes.length > 0) {
+            purposesContent = !isPurposeExpanded ? (
+                <p className='purposes'>
+                    {purposesText}
                 </p>
-            );
+            ) : null;
+        }
 
         const descriptionText =
             description ||
@@ -88,15 +93,19 @@ export default class ServiceItem extends React.Component {
                     disabled={required}
                     checked={checked || required}
                     tabIndex={visible ? '0' : '-1'}
-                    type="checkbox"
+                    type='checkbox'
                     onChange={onChange}
                 />
-                <label
-                    htmlFor={id}
-                    className="cm-list-label"
+                <div
+                    className='cm-list-label'
+                    onClick={() => {
+                        this.setState({
+                            isPurposeExpanded: !isPurposeExpanded,
+                        });
+                    }}
                     {...(required ? { tabIndex: '0' } : {})}
                 >
-                    <span className="cm-list-title" id={`${titleid}`}>
+                    <span className='cm-list-title' id={`${titleid}`}>
                         {title ||
                             tt(translations, lang, 'zz', ['!', 'title']) ||
                             t(['!', name, 'title?']) ||
@@ -104,13 +113,15 @@ export default class ServiceItem extends React.Component {
                     </span>
                     {requiredText}
                     {optOutText}
-                    <span className="cm-switch">
-                        <div className="slider round active"></div>
+                    <span className='cm-switch'>
+                        <div className='slider round active'></div>
                     </span>
-                </label>
+                    <div className='cm-open-purpose'>{isPurposeExpanded ? '+' : '-'}
+                    </div>
+                </div>
                 <div id={`${id}-description`}>
                     {descriptionText && (
-                        <p className="cm-list-description">
+                        <p className='cm-list-description'>
                             <Text config={config} text={descriptionText} />
                         </p>
                     )}
