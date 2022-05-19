@@ -7,6 +7,7 @@ consentModal:
         Here you can assess and customize the services that we'd like to use
         on this website. You're in charge! Enable or disable services as you see fit.
     title: Services we would like to use
+floatingButtonTitle: Cookies
 consentNotice:
     changeDescription: There were changes since your last visit, please renew your consent.
     title: Cookie Consent

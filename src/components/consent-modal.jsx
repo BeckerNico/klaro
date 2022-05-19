@@ -46,7 +46,7 @@ export default class ConsentModal extends React.Component {
 
         let declineButton;
 
-        if (!config.hideDeclineAll && !manager.confirmed)
+        if (!config.hideDeclineAll)
             declineButton = (
                 <button
                     disabled={confirming}
@@ -65,10 +65,10 @@ export default class ConsentModal extends React.Component {
                 type="button"
                 onClick={saveAndHide}
             >
-                {t([manager.confirmed ? 'save' : 'acceptSelected'])}
+                {t(['acceptSelected'])}
             </button>
         );
-        if (config.acceptAll && !manager.confirmed) {
+        if (config.acceptAll) {
             acceptAllButton = (
                 <button
                     disabled={confirming}
